@@ -3,7 +3,8 @@ data aws_caller_identity default {}
 data aws_region default {}
 
 locals {
-  tag = "${data.aws_caller_identity.default.account_id}.dkr.ecr.${data.aws_region.default.name}.amazonaws.com/${var.name}:${var.release}"
+  ecr = "${data.aws_caller_identity.default.account_id}.dkr.ecr.${data.aws_region.default.name}.amazonaws.com"
+  tag = "${local.ecr}/${var.name}:${var.release}"
 }
 
 data external docker-build {
