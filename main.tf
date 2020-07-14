@@ -3,8 +3,8 @@ data aws_caller_identity default {}
 data aws_region default {}
 
 locals {
-  ecr = "${data.aws_caller_identity.default.account_id}.dkr.ecr.${data.aws_region.default.name}.amazonaws.com"
-  tag = "${local.ecr}/${var.name}:${var.release}"
+  registry = "${data.aws_caller_identity.default.account_id}.dkr.ecr.${data.aws_region.default.name}.amazonaws.com"
+  tag      = "${local.registry}/${var.name}:${var.release}"
 }
 
 data external docker-build {
@@ -18,7 +18,10 @@ data external docker-login {
 data external docker-push {
   program = ["bash", "${path.module}/docker_push.sh", data.external.docker-build.result.image]
 
-  depends_on = [data.external.docker-login]
+  depends_on = [
+    data.external.docker-login,
+    aws_ecr_repository.default
+  ]
 }
 
 resource aws_ecr_repository default {

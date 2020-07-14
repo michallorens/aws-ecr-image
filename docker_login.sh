@@ -1,2 +1,2 @@
 #!/bin/bash
-jq -n "{ output: \"$(aws ecr get-login-password --region "$1" | docker login --username AWS --password-stdin "$2".dkr.ecr."$1".amazonaws.com)\", config: \"$(realpath ~/.docker/config.json)\" }"
+jq -n "{ output: \"$(aws ecr get-login-password --region "$1" | docker login --username AWS --password-stdin "$2".dkr.ecr."$1".amazonaws.com)\" }"
